@@ -16,7 +16,7 @@ ARG LARADOCK_PHP_VERSION
 ARG CHANGE_SOURCE=false
 RUN if [ ${CHANGE_SOURCE} = true ]; then \
     # Change application source from dl-cdn.alpinelinux.org to aliyun source
-    sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/' /etc/apk/repositories \
+    sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/' /etc/apk/repositories \
 ;fi
 
 RUN apk --update add wget \
@@ -99,41 +99,46 @@ RUN if [ ${INSTALL_BCMATH} = true ]; then \
 ###########################################################################
 
 ARG INSTALL_OCI8=false
+ARG ORACLE_INSTANT_CLIENT_MIRROR=https://raw.staticdn.net/diogomascarenha/oracle-instantclient/master/
 
-ENV LD_LIBRARY_PATH="/usr/local/instantclient"
-ENV ORACLE_HOME="/usr/local/instantclient"
+ENV LD_LIBRARY_PATH="/opt/oracle/instantclient_12_1"
+ENV OCI_HOME="/opt/oracle/instantclient_12_1"
+ENV OCI_LIB_DIR="/opt/oracle/instantclient_12_1"
+ENV OCI_INCLUDE_DIR="/opt/oracle/instantclient_12_1/sdk/include"
+ENV OCI_VERSION=12
 
-RUN if [ ${INSTALL_OCI8} = true ] && [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ]; then \
-    apk add make php7-pear php7-dev gcc musl-dev libnsl libaio poppler-utils libzip-dev zip unzip libaio-dev freetds-dev && \
-    ## Download and unarchive Instant Client v11
-      curl -o /tmp/basic.zip https://raw.githubusercontent.com/bumpx/oracle-instantclient/master/instantclient-basic-linux.x64-11.2.0.4.0.zip && \
-      curl -o /tmp/sdk.zip https://raw.githubusercontent.com/bumpx/oracle-instantclient/master/instantclient-sdk-linux.x64-11.2.0.4.0.zip && \
-      curl -o /tmp/sqlplus.zip https://raw.githubusercontent.com/bumpx/oracle-instantclient/master/instantclient-sqlplus-linux.x64-11.2.0.4.0.zip && \
-      unzip -d /usr/local/ /tmp/basic.zip && \
-      unzip -d /usr/local/ /tmp/sdk.zip && \
-      unzip -d /usr/local/ /tmp/sqlplus.zip \
-    ## Links are required for older SDKs
-      && ln -s /usr/local/instantclient_11_2 ${ORACLE_HOME} && \
-      ln -s ${ORACLE_HOME}/libclntsh.so.* ${ORACLE_HOME}/libclntsh.so && \
-      ln -s ${ORACLE_HOME}/libocci.so.* ${ORACLE_HOME}/libocci.so && \
-      ln -s ${ORACLE_HOME}/lib* /usr/lib && \
-      ln -s ${ORACLE_HOME}/sqlplus /usr/bin/sqlplus &&\
-      ln -s /usr/lib/libnsl.so.2.0.0  /usr/lib/libnsl.so.1 && \
-    ## Build OCI8 with PECL
-      echo "instantclient,${ORACLE_HOME}" | pecl install oci8 && \
-      echo 'extension=oci8.so' > /etc/php7/conf.d/30-oci8.ini \
-    #  Clean up
-    apk del php7-pear php7-dev gcc musl-dev && \
-    rm -rf /tmp/*.zip /tmp/pear/ && \
-    docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/usr/local/instantclient \
-        && docker-php-ext-configure pdo_dblib --with-libdir=/lib \
-        && docker-php-ext-install pdo_oci \
-        && docker-php-ext-enable oci8 \
-        && docker-php-ext-install zip && \
-          # Install the zip extension
-          docker-php-ext-configure zip && \
-          php -m | grep -q 'zip' \
-;fi
+RUN if [ ${INSTALL_OCI8} = true ]; then \
+    # Install wget
+    apt-get update && apt-get install --no-install-recommends -y wget \
+    # Install Oracle Instantclient
+    && mkdir /opt/oracle \
+        && cd /opt/oracle \
+        && wget ${ORACLE_INSTANT_CLIENT_MIRROR}instantclient-basic-linux.x64-12.1.0.2.0.zip \
+        && wget ${ORACLE_INSTANT_CLIENT_MIRROR}instantclient-sdk-linux.x64-12.1.0.2.0.zip \
+        && unzip /opt/oracle/instantclient-basic-linux.x64-12.1.0.2.0.zip -d /opt/oracle \
+        && unzip /opt/oracle/instantclient-sdk-linux.x64-12.1.0.2.0.zip -d /opt/oracle \
+        && ln -s /opt/oracle/instantclient_12_1/libclntsh.so.12.1 /opt/oracle/instantclient_12_1/libclntsh.so \
+        && ln -s /opt/oracle/instantclient_12_1/libclntshcore.so.12.1 /opt/oracle/instantclient_12_1/libclntshcore.so \
+        && ln -s /opt/oracle/instantclient_12_1/libocci.so.12.1 /opt/oracle/instantclient_12_1/libocci.so \
+        && rm -rf /opt/oracle/*.zip \
+    # Install PHP extensions deps
+    && apt-get update \
+        && apt-get install --no-install-recommends -y \
+            libaio-dev \
+            freetds-dev && \
+    # Install PHP extensions
+    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
+      echo 'instantclient,/opt/oracle/instantclient_12_1/' | pecl install oci8-2.0.10; \
+    else \
+      echo 'instantclient,/opt/oracle/instantclient_12_1/' | pecl install oci8-2.2.0; \
+    fi \
+        && docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/opt/oracle/instantclient_12_1,12.1 \
+        && docker-php-ext-configure pdo_dblib --with-libdir=/lib/x86_64-linux-gnu \
+        && docker-php-ext-install \
+                pdo_oci \
+        && docker-php-ext-enable \
+                oci8 \
+  ;fi
 
 # Install PostgreSQL drivers:
 ARG INSTALL_PGSQL=false
