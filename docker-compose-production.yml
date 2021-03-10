@@ -141,8 +141,12 @@ services:
         - DOCKER_TLS_CERTDIR=/certs
         - DOCKER_CERT_PATH=/certs/client
       networks:
-        - frontend
-        - backend
+        frontend:
+          aliases:
+            - workspace
+        backend:
+          aliases:
+            - workspace
       links:
         - docker-in-docker
 

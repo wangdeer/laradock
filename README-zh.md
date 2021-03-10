@@ -815,3 +815,25 @@ Docker 或 Laravel 的特别帮助，你可以在 [Codementor.io](https://www.co
 ## 许可证
 
 [MIT License](https://github.com/laradock/laradock/blob/master/LICENSE) (MIT)
+
+```
+## bash 别名
+
+## 初次启动
+alias dc-up="cd /www/laradock/ && docker-compose -f docker-compose-production.yml up -d nginx mysql redis php-worker workspace"
+
+## 后续启动
+alias dc-start="cd /www/laradock/ && docker-compose -f docker-compose-production.yml start"
+
+## 停止并删除容器(慎用)
+alias dc-down="cd /www/laradock/ && docker-compose -f docker-compose-production.yml down"
+
+## 停止不删除容器
+alias dc-stop="cd /www/laradock/ && docker-compose -f docker-compose-production.yml stop"
+
+## 重启容器
+alias dc-restart="cd /www/laradock/ && docker-compose -f docker-compose-production.yml restart"
+
+## 进入 workspace 这里的用户名设置成和宿主机一样的用户名，避免文件权限问题造成程序报错
+alias dc-workspace="cd /www/laradock/ && docker-compose -f docker-compose-production.yml exec --user=root workspace bash"
+```
