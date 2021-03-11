@@ -702,7 +702,7 @@ ENV NVM_DIR /home/laradock/.nvm
 ARG NVM_NODEJS_ORG_MIRROR
 ENV NVM_NODEJS_ORG_MIRROR ${NVM_NODEJS_ORG_MIRROR}
 
-USER ROOT
+USER root
 
 RUN apt-get install wget && \
     wget -P /home/laradock/ https://raw.sevencdn.com/creationix/nvm/v0.37.2/install.sh  && \
