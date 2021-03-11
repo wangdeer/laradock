@@ -533,8 +533,6 @@ ARG INSTALL_PHPREDIS=false
 RUN if [ ${INSTALL_PHPREDIS} = true ]; then \
     apt-get update -yqq && \
     apt-get install -yqq php-redis \
-    && echo "extension=redis.so" >> /etc/php/${LARADOCK_PHP_VERSION}/cli/php.ini \
-    && php -m | grep -q 'redis' \
 ;fi
 
 ###########################################################################
