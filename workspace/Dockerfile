@@ -702,14 +702,20 @@ ENV NVM_DIR /home/laradock/.nvm
 ARG NVM_NODEJS_ORG_MIRROR
 ENV NVM_NODEJS_ORG_MIRROR ${NVM_NODEJS_ORG_MIRROR}
 
+USER root
+
 RUN apt-get install wget && \
     wget -P /home/laradock/ https://raw.sevencdn.com/creationix/nvm/v0.37.2/install.sh  && \
-    sed -i 's/raw.githubusercontent.com/raw.sevencdn.com/' /home/laradock/install.sh
+    sed -i 's/raw.githubusercontent.com/raw.sevencdn.com/' /home/laradock/install.sh && \
+    cat /home/laradock/install.sh && \
+    chown laradock:laradock /home/laradock/install.sh
+
+USER laradock
 
 RUN if [ ${INSTALL_NODE} = true ]; then \
     # Install nvm (A Node Version Manager)
     mkdir -p $NVM_DIR && \
-    /home/laradock/install.sh\
+    bash /home/laradock/install.sh\
         && . $NVM_DIR/nvm.sh \
         && nvm install ${NODE_VERSION} \
         && nvm use ${NODE_VERSION} \
