@@ -532,8 +532,7 @@ ARG INSTALL_PHPREDIS=false
 
 RUN if [ ${INSTALL_PHPREDIS} = true ]; then \
     apt-get update -yqq && \
-    apt-get install -yqq php-redis && \
-    docker-php-ext-enable redis \
+    apt-get install -yqq php-redis \
 ;fi
 
 ###########################################################################
