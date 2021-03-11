@@ -531,8 +531,7 @@ RUN if [ ${INSTALL_GEARMAN} = true ]; then \
 ARG INSTALL_PHPREDIS=false
 
 RUN if [ ${INSTALL_PHPREDIS} = true ]; then \
-    apt-get update -yqq && \
-    apt-get install -yqq php-redis &&\
+    pecl install redis && \
     echo "extension=redis.so" >> /etc/php/${LARADOCK_PHP_VERSION}/mods-available/redis.ini && \
     ln -s /etc/php/${LARADOCK_PHP_VERSION}/mods-available/redis.ini /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/20-redis.ini \
     && php -m | grep -q 'redis' \
