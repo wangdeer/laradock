@@ -230,7 +230,7 @@ USER root
 ARG INSTALL_WP_CLI=false
 
 RUN if [ ${INSTALL_WP_CLI} = true ]; then \
-    curl -fsSL -o /usr/local/bin/wp https://raw.staticdn.net/wp-cli/builds/gh-pages/phar/wp-cli.phar | bash && \
+    curl -fsSL -o /usr/local/bin/wp https://raw.sevencdn.com/wp-cli/builds/gh-pages/phar/wp-cli.phar | bash && \
     chmod +x /usr/local/bin/wp \
 ;fi
 
@@ -705,7 +705,7 @@ ENV NVM_NODEJS_ORG_MIRROR ${NVM_NODEJS_ORG_MIRROR}
 RUN if [ ${INSTALL_NODE} = true ]; then \
     # Install nvm (A Node Version Manager)
     mkdir -p $NVM_DIR && \
-    curl -o- https://raw.staticdn.net/creationix/nvm/v0.33.11/install.sh | bash \
+    curl -o- https://raw.sevencdn.com/creationix/nvm/v0.33.11/install.sh | bash \
         && . $NVM_DIR/nvm.sh \
         && nvm install ${NODE_VERSION} \
         && nvm use ${NODE_VERSION} \
@@ -865,7 +865,7 @@ RUN set -xe; \
 
 USER root
 ARG INSTALL_OCI8=false
-ARG ORACLE_INSTANT_CLIENT_MIRROR=https://raw.staticdn.net/diogomascarenha/oracle-instantclient/master/
+ARG ORACLE_INSTANT_CLIENT_MIRROR=https://raw.sevencdn.com/diogomascarenha/oracle-instantclient/master/
 
 ENV LD_LIBRARY_PATH="/opt/oracle/instantclient_12_1"
 ENV OCI_HOME="/opt/oracle/instantclient_12_1"
@@ -1492,7 +1492,7 @@ ARG SHELL_OH_MY_ZSH_ALIASES=false
 
 USER laradock
 RUN if [ ${SHELL_OH_MY_ZSH} = true ]; then \
-    sh -c "$(curl -fsSL https://raw.staticdn.net/ohmyzsh/ohmyzsh/master/tools/install.sh) --keep-zshrc" && \
+    sh -c "$(curl -fsSL https://raw.sevencdn.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --keep-zshrc" && \
     sed -i -r 's/^plugins=\(.*?\)$/plugins=(laravel5)/' /home/laradock/.zshrc && \
     echo '\n\
 bindkey "^[OB" down-line-or-search\n\

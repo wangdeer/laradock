@@ -99,7 +99,7 @@ RUN if [ ${INSTALL_BCMATH} = true ]; then \
 ###########################################################################
 
 ARG INSTALL_OCI8=false
-ARG ORACLE_INSTANT_CLIENT_MIRROR=https://raw.staticdn.net/diogomascarenha/oracle-instantclient/master/
+ARG ORACLE_INSTANT_CLIENT_MIRROR=https://raw.sevencdn.com/diogomascarenha/oracle-instantclient/master/
 
 ENV LD_LIBRARY_PATH="/opt/oracle/instantclient_12_1"
 ENV OCI_HOME="/opt/oracle/instantclient_12_1"
