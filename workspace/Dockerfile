@@ -709,6 +709,7 @@ USER root
 RUN apt-get install wget && \
     wget -P /home/laradock/ https://raw.sevencdn.com/creationix/nvm/v0.37.2/install.sh  && \
     sed -i 's/raw.githubusercontent.com/raw.sevencdn.com/' /home/laradock/install.sh && \
+    sed -i 's/github.com/gitclone.com/' /home/laradock/install.sh && \
     cat /home/laradock/install.sh && \
     chown laradock:laradock /home/laradock/install.sh
 
