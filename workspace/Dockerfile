@@ -707,7 +707,10 @@ ENV NVM_NODEJS_ORG_MIRROR ${NVM_NODEJS_ORG_MIRROR}
 RUN if [ ${INSTALL_NODE} = true ]; then \
     # Install nvm (A Node Version Manager)
     mkdir -p $NVM_DIR && \
-    curl -o- https://raw.sevencdn.com/creationix/nvm/v0.33.11/install.sh | bash \
+    apt-get install wget && \
+    wget-get https://raw.sevencdn.com/creationix/nvm/v0.37.2/install.sh && \
+    sed -i 's/raw.githubusercontent.com/raw.sevencdn.com/' ./install.sh && \
+    ./install.sh\
         && . $NVM_DIR/nvm.sh \
         && nvm install ${NODE_VERSION} \
         && nvm use ${NODE_VERSION} \
