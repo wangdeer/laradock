@@ -13,7 +13,7 @@ volumes:
 services:
 
 ### Workspace Utilities ##################################
-    workspace:
+workspace:
       build:
         context: ./workspace
         args:
@@ -28,6 +28,7 @@ services:
           - INSTALL_SUBVERSION=${WORKSPACE_INSTALL_SUBVERSION}
           - INSTALL_BZ2=${WORKSPACE_INSTALL_BZ2}
           - INSTALL_GMP=${WORKSPACE_INSTALL_GMP}
+          - INSTALL_GNUPG=${WORKSPACE_INSTALL_GNUPG}
           - INSTALL_XDEBUG=${WORKSPACE_INSTALL_XDEBUG}
           - INSTALL_PCOV=${WORKSPACE_INSTALL_PCOV}
           - INSTALL_PHPDBG=${WORKSPACE_INSTALL_PHPDBG}
@@ -47,7 +48,7 @@ services:
           - NVM_NODEJS_ORG_MIRROR=${WORKSPACE_NVM_NODEJS_ORG_MIRROR}
           - INSTALL_NODE=${WORKSPACE_INSTALL_NODE}
           - NPM_REGISTRY=${WORKSPACE_NPM_REGISTRY}
-          - NPM_FETCH_RETRIES=${WORKSPACE_NPM_FETCH_RETRIES} 
+          - NPM_FETCH_RETRIES=${WORKSPACE_NPM_FETCH_RETRIES}
           - NPM_FETCH_RETRY_FACTOR=${WORKSPACE_NPM_FETCH_RETRY_FACTOR}
           - NPM_FETCH_RETRY_MINTIMEOUT=${WORKSPACE_NPM_FETCH_RETRY_MINTIMEOUT}
           - NPM_FETCH_RETRY_MAXTIMEOUT=${WORKSPACE_NPM_FETCH_RETRY_MAXTIMEOUT}
@@ -64,6 +65,7 @@ services:
           - INSTALL_OCI8=${WORKSPACE_INSTALL_OCI8}
           - INSTALL_V8JS=${WORKSPACE_INSTALL_V8JS}
           - COMPOSER_GLOBAL_INSTALL=${WORKSPACE_COMPOSER_GLOBAL_INSTALL}
+          - COMPOSER_VERSION=${WORKSPACE_COMPOSER_VERSION}
           - COMPOSER_AUTH=${WORKSPACE_COMPOSER_AUTH}
           - COMPOSER_REPO_PACKAGIST=${WORKSPACE_COMPOSER_REPO_PACKAGIST}
           - INSTALL_WORKSPACE_SSH=${WORKSPACE_INSTALL_WORKSPACE_SSH}
@@ -105,6 +107,7 @@ services:
           - YARN_VERSION=${WORKSPACE_YARN_VERSION}
           - DRUSH_VERSION=${WORKSPACE_DRUSH_VERSION}
           - AST_VERSION=${WORKSPACE_AST_VERSION}
+          - IMAGEMAGICK_VERSION=${WORKSPACE_IMAGEMAGICK_VERSION}
           - TZ=${WORKSPACE_TIMEZONE}
           - BLACKFIRE_CLIENT_ID=${BLACKFIRE_CLIENT_ID}
           - BLACKFIRE_CLIENT_TOKEN=${BLACKFIRE_CLIENT_TOKEN}
@@ -116,7 +119,11 @@ services:
           - INSTALL_GNU_PARALLEL=${WORKSPACE_INSTALL_GNU_PARALLEL}
           - INSTALL_LNAV=${WORKSPACE_INSTALL_LNAV}
           - INSTALL_PROTOC=${WORKSPACE_INSTALL_PROTOC}
+          - INSTALL_PHPDECIMAL=${WORKSPACE_INSTALL_PHPDECIMAL}
+          - INSTALL_ZOOKEEPER=${WORKSPACE_INSTALL_ZOOKEEPER}
           - PROTOC_VERSION=${WORKSPACE_PROTOC_VERSION}
+          - INSTALL_DOCKER_CLIENT=${WORKSPACE_INSTALL_DOCKER_CLIENT}
+          - INSTALL_MEMCACHED=${WORKSPACE_INSTALL_MEMCACHED}
           - http_proxy
           - https_proxy
           - no_proxy
@@ -141,17 +148,13 @@ services:
         - DOCKER_TLS_CERTDIR=/certs
         - DOCKER_CERT_PATH=/certs/client
       networks:
-        frontend:
-          aliases:
-            - workspace
-        backend:
-          aliases:
-            - workspace
+        - frontend
+        - backend
       links:
         - docker-in-docker
 
 ### PHP-FPM ##############################################
-    php-fpm:
+php-fpm:
       build:
         context: ./php-fpm
         args:
@@ -161,6 +164,7 @@ services:
           - LARADOCK_PHALCON_VERSION=${PHALCON_VERSION}
           - INSTALL_BZ2=${PHP_FPM_INSTALL_BZ2}
           - INSTALL_GMP=${PHP_FPM_INSTALL_GMP}
+          - INSTALL_GNUPG=${PHP_FPM_INSTALL_GNUPG}
           - INSTALL_XDEBUG=${PHP_FPM_INSTALL_XDEBUG}
           - INSTALL_PCOV=${PHP_FPM_INSTALL_PCOV}
           - INSTALL_PHPDBG=${PHP_FPM_INSTALL_PHPDBG}
@@ -214,13 +218,17 @@ services:
           - INSTALL_WKHTMLTOPDF=${PHP_FPM_INSTALL_WKHTMLTOPDF}
           - INSTALL_XHPROF=${PHP_FPM_INSTALL_XHPROF}
           - INSTALL_XMLRPC=${PHP_FPM_INSTALL_XMLRPC}
+          - INSTALL_PHPDECIMAL=${PHP_FPM_INSTALL_PHPDECIMAL}
+          - INSTALL_ZOOKEEPER=${PHP_FPM_INSTALL_ZOOKEEPER}
           - DOWNGRADE_OPENSSL_TLS_AND_SECLEVEL=${PHP_DOWNGRADE_OPENSSL_TLS_AND_SECLEVEL}
           - PUID=${PHP_FPM_PUID}
           - PGID=${PHP_FPM_PGID}
+          - IMAGEMAGICK_VERSION=${PHP_FPM_IMAGEMAGICK_VERSION}
           - LOCALE=${PHP_FPM_DEFAULT_LOCALE}
           - PHP_FPM_NEW_RELIC=${PHP_FPM_NEW_RELIC}
           - PHP_FPM_NEW_RELIC_KEY=${PHP_FPM_NEW_RELIC_KEY}
           - PHP_FPM_NEW_RELIC_APP_NAME=${PHP_FPM_NEW_RELIC_APP_NAME}
+          - INSTALL_DOCKER_CLIENT=${PHP_FPM_INSTALL_DOCKER_CLIENT}
           - http_proxy
           - https_proxy
           - no_proxy
@@ -228,6 +236,8 @@ services:
         - ./php-fpm/php${PHP_VERSION}.ini:/usr/local/etc/php/php.ini
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
         - docker-in-docker:/certs/client
+      ports:
+        - "${PHP_FPM_XDEBUG_PORT}:9003"
       expose:
         - "9000"
       extra_hosts:
@@ -258,7 +268,9 @@ services:
           - INSTALL_GD=${PHP_WORKER_INSTALL_GD}
           - INSTALL_IMAGEMAGICK=${PHP_WORKER_INSTALL_IMAGEMAGICK}
           - INSTALL_GMP=${PHP_WORKER_INSTALL_GMP}
+          - INSTALL_GNUPG=${PHP_WORKER_INSTALL_GNUPG}
           - INSTALL_PGSQL=${PHP_WORKER_INSTALL_PGSQL}
+          - INSTALL_MONGO=${PHP_WORKER_INSTALL_MONGO}
           - INSTALL_BCMATH=${PHP_WORKER_INSTALL_BCMATH}
           - INSTALL_OCI8=${PHP_WORKER_INSTALL_OCI8}
           - INSTALL_PHALCON=${PHP_WORKER_INSTALL_PHALCON}
@@ -278,6 +290,7 @@ services:
           - INSTALL_XMLRPC=${PHP_WORKER_INSTALL_XMLRPC}
           - PUID=${PHP_WORKER_PUID}
           - PGID=${PHP_WORKER_PGID}
+          - IMAGEMAGICK_VERSION=${PHP_WORKER_IMAGEMAGICK_VERSION}
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
         - ./php-worker/supervisord.d:/etc/supervisord.d
