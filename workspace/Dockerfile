@@ -232,7 +232,7 @@ USER root
 ARG INSTALL_WP_CLI=false
 
 RUN if [ ${INSTALL_WP_CLI} = true ]; then \
-    curl -fsSL -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar | bash && \
+    curl -fsSL -o /usr/local/bin/wp https://raw.githubusercontents.com/wp-cli/builds/gh-pages/phar/wp-cli.phar | bash && \
     chmod +x /usr/local/bin/wp \
 ;fi
 
@@ -707,18 +707,25 @@ ENV NVM_DIR /home/laradock/.nvm
 ARG NVM_NODEJS_ORG_MIRROR
 ENV NVM_NODEJS_ORG_MIRROR ${NVM_NODEJS_ORG_MIRROR}
 
+USER root
+
+RUN apt-get install wget && \
+    wget -P /home/laradock/ https://raw.githubusercontents.com/creationix/nvm/v0.33.11/install.sh  && \
+    sed -i 's/raw.githubusercontent.com/raw.githubusercontents.com/' /home/laradock/install.sh && \
+    sed -i 's/github.com/gitclone.com\/github.com/' /home/laradock/install.sh && \
+    cat /home/laradock/install.sh && \
+    chown laradock:laradock /home/laradock/install.sh
+
+USER laradock
+
 RUN if [ ${INSTALL_NODE} = true ]; then \
     # Install nvm (A Node Version Manager)
     mkdir -p $NVM_DIR && \
-    curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash \
+    bash /home/laradock/install.sh\
         && . $NVM_DIR/nvm.sh \
         && nvm install ${NODE_VERSION} \
         && nvm use ${NODE_VERSION} \
         && nvm alias ${NODE_VERSION} \
-        && npm config set fetch-retries ${NPM_FETCH_RETRIES} \
-        && npm config set fetch-retry-factor ${NPM_FETCH_RETRY_FACTOR} \
-        && npm config set fetch-retry-mintimeout ${NPM_FETCH_RETRY_MINTIMEOUT} \
-        && npm config set fetch-retry-maxtimeout ${NPM_FETCH_RETRY_MAXTIMEOUT} \
         && if [ ${NPM_REGISTRY} ]; then \
         npm config set registry ${NPM_REGISTRY} \
         ;fi \
@@ -1529,7 +1536,7 @@ ARG SHELL_OH_MY_ZSH_ALIASES=false
 
 USER laradock
 RUN if [ ${SHELL_OH_MY_ZSH} = true ]; then \
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --keep-zshrc" && \
+    sh -c "$(curl -fsSL https://raw.githubusercontents.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --keep-zshrc" && \
     sed -i -r 's/^plugins=\(.*?\)$/plugins=(laravel5)/' /home/laradock/.zshrc && \
     echo '\n\
 bindkey "^[OB" down-line-or-search\n\
