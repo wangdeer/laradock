@@ -17,7 +17,7 @@ It supports a variety of common services, all pre-configured to provide a ready 
 <a name="features"></a>
 ## Features
 
-- Easy switch between PHP versions: 7.4, 7.3, 7.2, 7.1, 5.6...
+- Easy switch between PHP versions: 8.0, 7.4, 7.3, 7.2, 7.1, 5.6...
 - Choose your favorite database engine: MySQL, Postgres, MariaDB...
 - Run your own stack: Memcached, HHVM, RabbitMQ...
 - Each software runs on its own container: PHP-FPM, NGINX, PHP-CLI...
@@ -385,9 +385,12 @@ Sponsoring is an act of giving in a different fashion. 🌱
 
 <p align="center">
 
-<a href="https://casinopilotti.com/"        target="_blank"   style="margin-right: 4em"><img src="https://raw.githubusercontent.com/laradock/laradock/master/.github/home-page-images/custom-sponsors/casinopilotti.png"        height="75px"    alt="CasinoPilotti" ></a>
-<a href="https://www.bestonlinecasino.com/" target="_blank"   style="margin-right: 4em"><img src="https://raw.githubusercontent.com/laradock/laradock/master/.github/home-page-images/custom-sponsors/bestonlinecasino.jpg"     height="75px"    alt="We thank bestonlinecasino.com for their support"></a>
-<a href="http://apiato.io/"                 target="_blank"   style="margin-right: 4em"><img src="https://raw.githubusercontent.com/laradock/laradock/master/.github/home-page-images/custom-sponsors/apiato.png"               height="75px"    alt="Apiato Build PHP API's faster"></a>
+<a href="https://kasynohex.com/"                      target="_blank"   style="margin-right: 4em"><img src="https://raw.githubusercontent.com/laradock/laradock/master/.github/home-page-images/custom-sponsors/PLD.png"                  height="75px"    alt="KasynoHEX.com Polska"></a>
+<a href="https://onlinecasinohex.ca/online-casinos/"  target="_blank"   style="margin-right: 4em"><img src="https://raw.githubusercontent.com/laradock/laradock/master/.github/home-page-images/custom-sponsors/CA.png"                   height="75px"    alt="Online casino list in Canada by OnlineCasinoHEX.ca"></a>
+<a href="https://aussiecasinohex.com/online-pokies/"  target="_blank"   style="margin-right: 4em"><img src="https://raw.githubusercontent.com/laradock/laradock/master/.github/home-page-images/custom-sponsors/AU.png"                   height="75px"    alt="Online pokies by AussieCasinoHEX.com"></a>
+<a href="http://apiato.io/"                           target="_blank"   style="margin-right: 4em"><img src="https://raw.githubusercontent.com/laradock/laradock/master/.github/home-page-images/custom-sponsors/apiato.png"               height="75px"    alt="Apiato Build PHP API's faster"></a>
+<a href="https://www.bestonlinecasino.com/"           target="_blank"   style="margin-right: 4em"><img src="https://raw.githubusercontent.com/laradock/laradock/master/.github/home-page-images/custom-sponsors/bestonlinecasino.jpg"     height="75px"    alt="We thank bestonlinecasino.com for their support"></a>
+<a href="https://casinopilotti.com/"                  target="_blank"   style="margin-right: 4em"><img src="https://raw.githubusercontent.com/laradock/laradock/master/.github/home-page-images/custom-sponsors/casinopilotti.png"        height="75px"    alt="CasinoPilotti"></a>
 
 
 <a href="https://opencollective.com/laradock/tiers/gold-sponsors/0/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/0/avatar.svg?button=false&isActive=true" height="75px"></a>
@@ -413,6 +416,9 @@ Sponsoring is an act of giving in a different fashion. 🌱
 ### Silver Sponsors
 
 <p align="center">
+
+<a href="https://veepn.com/vpn-apps/vpn-for-chrome/"  target="_blank"   style="margin-right: 4em"><img src="https://raw.githubusercontent.com/laradock/laradock/master/.github/home-page-images/custom-sponsors/VeePN.png"                height="65px"    alt="VeePN Chrome extension"></a>
+
 
 <a href="https://opencollective.com/laradock/tiers/silver-sponsors/0/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/silver-sponsors/0/avatar.svg?button=false&isActive=true" height="65px"></a>
 <a href="https://opencollective.com/laradock/tiers/silver-sponsors/1/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/silver-sponsors/1/avatar.svg?button=false&isActive=true" height="65px"></a>
