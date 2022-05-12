@@ -400,7 +400,7 @@ services:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
         - docker-in-docker:/certs/client
       ports:
-        - "9004:9003"
+        - "9056:9003"
       expose:
         - "9000"
       extra_hosts:
@@ -419,14 +419,14 @@ services:
       links:
         - docker-in-docker
 
-### PHP-FPM-80 ##############################################
-    php-fpm-80:
+### PHP-FPM-73 ##############################################
+    php-fpm-73:
       build:
         context: ./php-fpm
         args:
           - CHANGE_SOURCE=${CHANGE_SOURCE}
           - BASE_IMAGE_TAG_PREFIX=${PHP_FPM_BASE_IMAGE_TAG_PREFIX}
-          - LARADOCK_PHP_VERSION=8.0
+          - LARADOCK_PHP_VERSION=7.3
           - LARADOCK_PHALCON_VERSION=${PHALCON_VERSION}
           - INSTALL_BZ2=${PHP_FPM_INSTALL_BZ2}
           - INSTALL_ENCHANT=${PHP_FPM_INSTALL_ENCHANT}
@@ -504,11 +504,11 @@ services:
           - https_proxy
           - no_proxy
       volumes:
-        - ./php-fpm/php8.0.ini:/usr/local/etc/php/php.ini
+        - ./php-fpm/php7.3.ini:/usr/local/etc/php/php.ini
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
         - docker-in-docker:/certs/client
       ports:
-        - "9005:9003"
+        - "9073:9003"
       expose:
         - "9000"
       extra_hosts:
