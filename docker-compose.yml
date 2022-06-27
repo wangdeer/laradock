@@ -189,6 +189,15 @@ services:
         - "${WORKSPACE_VUE_CLI_SERVE_HOST_PORT}:8080"
         - "${WORKSPACE_VUE_CLI_UI_HOST_PORT}:8000"
         - "${WORKSPACE_ANGULAR_CLI_SERVE_HOST_PORT}:4200"
+        - "9501:9501"
+        - "9502:9502"
+        - "9503:9503"
+        - "9504:9504"
+        - "9505:9505"
+        - "9506:9506"
+        - "9507:9507"
+        - "9508:9508"
+        - "9509:9509"
       tty: true
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
@@ -746,6 +755,7 @@ services:
         - php-fpm-56
         - php-fpm-73
         - php-fpm-81
+        - workspace
       networks:
         - frontend
         - backend
