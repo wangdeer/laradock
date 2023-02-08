@@ -746,7 +746,7 @@ USER laradock
 
 RUN if [ ${INSTALL_NODE} = true ]; then \
     # Install nvm (A Node Version Manager)
-    mkdir -p $NVM_DIR && \
+    mkdir -p $NVM_DIR \
     && bash /home/laradock/install.sh \
     && . $NVM_DIR/nvm.sh \
     && nvm install ${NODE_VERSION} \
