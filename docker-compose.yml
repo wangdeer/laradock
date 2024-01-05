@@ -532,6 +532,9 @@ services:
         - docker-in-docker:/certs/client
       ports:
         - "9073:9003"
+        - "8003:8003"
+        - "8004:8004"
+        - "8101:8101"
       expose:
         - "9000"
       extra_hosts:

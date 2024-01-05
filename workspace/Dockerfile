@@ -230,7 +230,7 @@ USER root
 ARG INSTALL_WP_CLI=false
 
 RUN if [ ${INSTALL_WP_CLI} = true ]; then \
-    curl -fsSL -o /usr/local/bin/wp https://raw.githubusercontents.com/wp-cli/builds/gh-pages/phar/wp-cli.phar | bash && \
+    curl -fsSL -o /usr/local/bin/wp https://raw.gitmirror.com/wp-cli/builds/gh-pages/phar/wp-cli.phar | bash && \
     chmod +x /usr/local/bin/wp \
 ;fi
 
@@ -736,9 +736,9 @@ ENV NVM_NODEJS_ORG_MIRROR ${NVM_NODEJS_ORG_MIRROR}
 USER root
 
 RUN apt-get install wget && \
-    wget -P /home/laradock/ https://raw.githubusercontents.com/nvm-sh/nvm/v0.39.2/install.sh  && \
-    sed -i 's/raw.githubusercontent.com/raw.githubusercontents.com/' /home/laradock/install.sh && \
-    sed -i 's/github.com/gitclone.com\/github.com/' /home/laradock/install.sh && \
+    wget -P /home/laradock/ https://raw.gitmirror.com/nvm-sh/nvm/v0.39.2/install.sh  && \
+    sed -i 's/raw.githubusercontent.com/raw.gitmirror.com/' /home/laradock/install.sh && \
+    sed -i 's/github.com/githubfast.com/' /home/laradock/install.sh && \
     cat /home/laradock/install.sh && \
     chown laradock:laradock /home/laradock/install.sh
 
@@ -844,10 +844,13 @@ ENV YARN_VERSION ${YARN_VERSION}
 RUN if [ ${INSTALL_YARN} = true ]; then \
     [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" && \
     if [ ${YARN_VERSION} = "latest" ]; then \
-        curl -o- -L https://yarnpkg.com/install.sh | bash; \
+      wget -P /home/laradock/yarn/ https://classic.yarnpkg.com/install.sh | bash; \
     else \
-        curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version ${YARN_VERSION}; \
+      wget -P /home/laradock/yarn/ https://classic.yarnpkg.com/install.sh | bash -s -- --version ${YARN_VERSION}; \
     fi && \
+    sed -i 's/yarnpkg.com/classic.yarnpkg.com/' /home/laradock/yarn/install.sh && \
+    cat /home/laradock/yarn/install.sh && \
+    chown laradock:laradock /home/laradock/yarn/install.sh && \
     echo "" >> ~/.bashrc && \
     echo 'export PATH="$HOME/.yarn/bin:$PATH"' >> ~/.bashrc \
 ;fi
@@ -1576,7 +1579,7 @@ ARG SHELL_OH_MY_ZSH_ALIASES=false
 
 USER laradock
 RUN if [ ${SHELL_OH_MY_ZSH} = true ]; then \
-    sh -c "$(curl -fsSL https://raw.githubusercontents.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --keep-zshrc" && \
+    sh -c "$(curl -fsSL https://raw.gitmirror.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --keep-zshrc" && \
     sed -i -r 's/^plugins=\(.*?\)$/plugins=(laravel5)/' /home/laradock/.zshrc && \
     echo '\n\
 bindkey "^[OB" down-line-or-search\n\
@@ -1807,7 +1810,7 @@ USER root
 
 # Clean up
 RUN apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    rm -rf /var/lib/apt/lists/* /var/tmp/* && \
     rm /var/log/lastlog /var/log/faillog
 
 # Set default work directory
