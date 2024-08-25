@@ -240,7 +240,7 @@ USER root
 ARG INSTALL_WP_CLI=false
 
 RUN if [ ${INSTALL_WP_CLI} = true ]; then \
-    curl -fsSL -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar | bash && \
+    curl -fsSL -o /usr/local/bin/wp https://raw.gitmirror.com/wp-cli/builds/gh-pages/phar/wp-cli.phar | bash && \
     chmod +x /usr/local/bin/wp \
 ;fi
 
@@ -580,6 +580,8 @@ RUN set -eux; \
         echo '' | pecl -q install swoole-4.5.11; \
       elif [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ]; then \
         echo '' | pecl -q install swoole-4.8.12; \
+      elif [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
+        echo '' | pecl -q install swoole-5.1.2; \
       else \
         echo '' | pecl -q install swoole; \
       fi; \
@@ -760,43 +762,39 @@ ENV NVM_NODEJS_ORG_MIRROR ${NVM_NODEJS_ORG_MIRROR}
 
 USER root
 
-RUN apt-get install wget && \
-    wget -P /home/laradock/ https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh  && \
-    cat /home/laradock/install.sh && \
-    chown laradock:laradock /home/laradock/install.sh
-
 USER laradock
 
 RUN if [ ${INSTALL_NODE} = true ]; then \
     # Install nvm (A Node Version Manager)
-    mkdir -p $NVM_DIR \
-    && bash /home/laradock/install.sh \
-    && . $NVM_DIR/nvm.sh \
-    && nvm install ${NODE_VERSION} \
-    && nvm use ${NODE_VERSION} \
-    && nvm alias ${NODE_VERSION} \
-    && npm config set fetch-retries ${NPM_FETCH_RETRIES} \
-    && npm config set fetch-retry-factor ${NPM_FETCH_RETRY_FACTOR} \
-    && npm config set fetch-retry-mintimeout ${NPM_FETCH_RETRY_MINTIMEOUT} \
-    && npm config set fetch-retry-maxtimeout ${NPM_FETCH_RETRY_MAXTIMEOUT} \
-    && if [ ${NPM_REGISTRY} ]; then \
-    npm config set registry ${NPM_REGISTRY} \
-    ;fi \
-    && if [ ${INSTALL_NPM_GULP} = true ]; then \
-    npm install -g gulp \
-    ;fi \
-    && if [ ${INSTALL_NPM_BOWER} = true ]; then \
-    npm install -g bower \
-    ;fi \
-    && if [ ${INSTALL_NPM_VUE_CLI} = true ]; then \
-    npm install -g @vue/cli \
-    ;fi \
-    && if [ ${INSTALL_NPM_ANGULAR_CLI} = true ]; then \
-    npm install -g @angular/cli \
-    ;fi \
-    && if [ ${INSTALL_NPM_CHECK_UPDATES_CLI} = true ]; then \
-    npm install -g npm-check-updates \
-    ;fi \
+    mkdir -p $NVM_DIR && \
+    curl -o- https://raw.gitmirror.com/nvm-sh/nvm/v0.39.2/install.sh | bash \
+        && . $NVM_DIR/nvm.sh \
+        && nvm install ${NODE_VERSION} \
+        && nvm use ${NODE_VERSION} \
+        && nvm alias ${NODE_VERSION} \
+        && npm cache clear --force \
+        && npm config set fetch-retries ${NPM_FETCH_RETRIES} \
+        && npm config set fetch-retry-factor ${NPM_FETCH_RETRY_FACTOR} \
+        && npm config set fetch-retry-mintimeout ${NPM_FETCH_RETRY_MINTIMEOUT} \
+        && npm config set fetch-retry-maxtimeout ${NPM_FETCH_RETRY_MAXTIMEOUT} \
+        && if [ ${NPM_REGISTRY} ]; then \
+        npm config set registry ${NPM_REGISTRY} \
+        ;fi \
+        && if [ ${INSTALL_NPM_GULP} = true ]; then \
+        npm install -g gulp \
+        ;fi \
+        && if [ ${INSTALL_NPM_BOWER} = true ]; then \
+        npm install -g bower \
+        ;fi \
+        && if [ ${INSTALL_NPM_VUE_CLI} = true ]; then \
+        npm install -g @vue/cli \
+        ;fi \
+        && if [ ${INSTALL_NPM_ANGULAR_CLI} = true ]; then \
+        npm install -g @angular/cli \
+        ;fi \
+        && if [ ${INSTALL_NPM_CHECK_UPDATES_CLI} = true ]; then \
+        npm install -g npm-check-updates \
+        ;fi \
 ;fi
 
 # Wouldn't execute when added to the RUN statement in the above block
@@ -1641,7 +1639,7 @@ ARG SHELL_OH_MY_ZSH_ALIASES=false
 
 USER laradock
 RUN if [ ${SHELL_OH_MY_ZSH} = true ]; then \
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --keep-zshrc" && \
+    sh -c "$(curl -fsSL https://raw.gitmirror.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --keep-zshrc" && \
     sed -i -r 's/^plugins=\(.*?\)$/plugins=(laravel composer)/' /home/laradock/.zshrc && \
     echo '\n\
 bindkey "^[OB" down-line-or-search\n\

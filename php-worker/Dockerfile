@@ -190,9 +190,9 @@ ENV ORACLE_HOME="/usr/local/instantclient"
 RUN if [ ${INSTALL_OCI8} = true ] && [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ]; then \
   apk add make php7-pear php7-dev gcc musl-dev libnsl libaio poppler-utils libzip-dev zip unzip libaio-dev freetds-dev && \
   ## Download and unarchive Instant Client v11
-  curl -o /tmp/basic.zip https://raw.githubusercontent.com/bumpx/oracle-instantclient/master/instantclient-basic-linux.x64-11.2.0.4.0.zip && \
-  curl -o /tmp/sdk.zip https://raw.githubusercontent.com/bumpx/oracle-instantclient/master/instantclient-sdk-linux.x64-11.2.0.4.0.zip && \
-  curl -o /tmp/sqlplus.zip https://raw.githubusercontent.com/bumpx/oracle-instantclient/master/instantclient-sqlplus-linux.x64-11.2.0.4.0.zip && \
+  curl -o /tmp/basic.zip https://raw.gitmirror.com/bumpx/oracle-instantclient/master/instantclient-basic-linux.x64-11.2.0.4.0.zip && \
+  curl -o /tmp/sdk.zip https://raw.gitmirror.com/bumpx/oracle-instantclient/master/instantclient-sdk-linux.x64-11.2.0.4.0.zip && \
+  curl -o /tmp/sqlplus.zip https://raw.gitmirror.com/bumpx/oracle-instantclient/master/instantclient-sqlplus-linux.x64-11.2.0.4.0.zip && \
   unzip -d /usr/local/ /tmp/basic.zip && \
   unzip -d /usr/local/ /tmp/sdk.zip && \
   unzip -d /usr/local/ /tmp/sqlplus.zip \
@@ -651,6 +651,17 @@ ENTRYPOINT ["/usr/bin/supervisord", "-n", "-c",  "/etc/supervisord.conf"]
 # Check PHP version
 #--------------------------------------------------------------------------
 #
+
+###########################################################################
+# Set Timezone
+###########################################################################
+
+ARG TZ=UTC
+ENV TZ ${TZ}
+
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+###########################################################################
 
 RUN php -v | head -n 1 | grep -q "PHP ${PHP_VERSION}."
 
