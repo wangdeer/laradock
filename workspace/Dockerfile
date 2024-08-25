@@ -240,7 +240,7 @@ USER root
 ARG INSTALL_WP_CLI=false
 
 RUN if [ ${INSTALL_WP_CLI} = true ]; then \
-    curl -fsSL -o /usr/local/bin/wp https://raw.gitmirror.com/wp-cli/builds/gh-pages/phar/wp-cli.phar | bash && \
+    curl -fsSL -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar | bash && \
     chmod +x /usr/local/bin/wp \
 ;fi
 
@@ -761,9 +761,7 @@ ENV NVM_NODEJS_ORG_MIRROR ${NVM_NODEJS_ORG_MIRROR}
 USER root
 
 RUN apt-get install wget && \
-    wget -P /home/laradock/ https://raw.gitmirror.com/nvm-sh/nvm/v0.39.2/install.sh  && \
-    sed -i 's/raw.githubusercontent.com/raw.gitmirror.com/' /home/laradock/install.sh && \
-    sed -i 's/github.com/githubfast.com/' /home/laradock/install.sh && \
+    wget -P /home/laradock/ https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh  && \
     cat /home/laradock/install.sh && \
     chown laradock:laradock /home/laradock/install.sh
 
@@ -1643,7 +1641,7 @@ ARG SHELL_OH_MY_ZSH_ALIASES=false
 
 USER laradock
 RUN if [ ${SHELL_OH_MY_ZSH} = true ]; then \
-    sh -c "$(curl -fsSL https://raw.gitmirror.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --keep-zshrc" && \
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --keep-zshrc" && \
     sed -i -r 's/^plugins=\(.*?\)$/plugins=(laravel composer)/' /home/laradock/.zshrc && \
     echo '\n\
 bindkey "^[OB" down-line-or-search\n\
